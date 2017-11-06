@@ -28,22 +28,26 @@ Test = pd.read_csv('./Online_Courses_testing.csv')
 ## Create a float32 array for Test.
 Test = np.array(Train).astype(np.float32)
 ## Extract the testing features as x_test
-x_test = Test[:,1:]
+x_test = Test[:, 1:]
 ## Extract the testing labels as y_test
-y_test = Test[:,0]
+y_test = Test[:, 0]
 
 ## Specify that all features have real-value data
-feature_columns = [tf.contrib.layers.real_valued_column("", dimension = len(Train[0]) - 1)]
+feature_columns = [
+    tf.contrib.layers.real_valued_column("", dimension=len(Train[0]) - 1)
+]
 
 ## Build 3 layer DNN with 20, 20, 10 units respectively using tf.contrib.learn
-classifier = tf.contrib.learn.DNNClassifier(feature_columns=feature_columns, hidden_units=[20,20,10], n_classes=2)
+classifier = tf.contrib.learn.DNNClassifier(
+    feature_columns=feature_columns,
+    hidden_units=[20, 20, 10],
+    n_classes=2,
+    optimizer=tf.train.AdamOptimizer())
 
 ## Fit the DNN model using training data and labels
-classifier.fit(x = x_train, y = y_train, steps = 3000)
+classifier.fit(x=x_train, y=y_train, steps=200000)
 
 ## Prediction
 ## Use the test data and ground truth labels to test the classifier
-accuracy_score = classifier.evaluate(x = x_test, y = y_test)["accuracy"]
+accuracy_score = classifier.evaluate(x=x_test, y=y_test)["accuracy"]
 print('Accuracy: {0:f}'.format(accuracy_score))
-
-
